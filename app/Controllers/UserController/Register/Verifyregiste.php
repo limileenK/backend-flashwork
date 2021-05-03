@@ -67,9 +67,9 @@ class Verifyregiste extends ResourceController
                     return $this->failNotFound('send err');
                 }
             } elseif (count($checkVerifyModel) > 0) {
-                $VerifyModel->update($User_email, ['u_otp' => $concealotp]);
-                if ($VerifyModel) {
+                $VerifyModel->update($User_email, $data);
 
+                if ($VerifyModel) {
                     $to = $User_email;
                     $email = \Config\Services::email();
                     $email->setFrom('flashwork.co@gmail.com', 'flashwork');
@@ -108,10 +108,11 @@ class Verifyregiste extends ResourceController
         $step2 = strrev($step1);
         $step3 = md5($step2);
         $concealotp = strrev($step3);
+
         $timeNow = Time::now('Asia/Bangkok');
         $settime = $timeNow->addMinutes(+5);
         $timeEnd = $settime->toDateTimeString();
-        
+
         if ($Status_reset == true) {
             $data = [
                 'u_otp' => $concealotp,

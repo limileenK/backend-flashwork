@@ -39,7 +39,6 @@ $routes->get('/PIC/(:any)', 'WorkController\ShowWork::showPIC/$1');
 $routes->get('/show_workCount', 'WorkController/ShowWork::ShowWorkCount');
 $routes->get('/detailpost/(:any)', 'WorkController\ShowWork::getDetailPost/$1');
 $routes->post('/search', 'WorkController/SearchPost::searchWork');
-$routes->get('/show_comment/(:any)','WorkController\Showcom::showcomment/$1');
 
 //------------------------------------Admin-------------------------------------------
 
@@ -67,7 +66,6 @@ $routes->delete('/subcate/(:any)', 'AdminController\Category\SubCategoryControl:
 $routes->get('/subcateJoin', 'AdminController/Category/SubCategoryControl::showSubJoin');
 $routes->get('/subcatebyid/(:any)', 'AdminController\Category\SubCategoryControl::subcatebyid/$1');
 $routes->get('/cate/(:any)', 'AdminController\Category\MainCategory::showWorkbyCate/$1');
-$routes->get('/showworkbysubcate/(:any)', 'WorkController\ShowWork::showworkbysubcate/$1');
 
 //-------------------------------------usercontroll------------------------------
 

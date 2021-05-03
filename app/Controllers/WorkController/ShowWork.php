@@ -7,7 +7,6 @@ use CodeIgniter\API\ResponseTrait;
 use App\Models\Work_model\PostworkModel;
 use App\Models\Work_model\Work_img;
 use App\Models\Work_model\PackageModel;
-use App\Models\Admin_model\Subcategory;
 
 
 class ShowWork extends ResourceController
@@ -19,7 +18,6 @@ class ShowWork extends ResourceController
         $data = $PostworkModel
             ->join('package', 'package.pk_aw_id = all_work.aw_id')
             ->join('work_img', 'work_img.w_aw_id = all_work.aw_id')
-            ->join('student', 'student.std_id = all_work.aw_std_id')
             ->findAll();
         return $this->respond($data);
     }
@@ -74,21 +72,5 @@ class ShowWork extends ResourceController
             ->where('w_aw_id', $id)->orderBy('w_aw_id')
             ->findAll();
         return $this->respond($img);
-    }
-
-    public function showWorkbysubcate($id = null)
-    {
-        $model = new Subcategory();
-        $data = $model
-            ->select('*')
-            ->join('all_work', 'all_work.aw_sub_cate_id = sub_cate.sub_cate_id')
-            ->join('work_img', 'all_work.aw_id = work_img.w_aw_id')
-            ->join('package', ' all_work.aw_id = package.pk_aw_id')
-            ->join('student', 'student.std_id = all_work.aw_std_id')
-            ->where('sub_cate.sub_cate_id', $id)
-            ->where('all_work.aw_status',  'Approve')
-            ->groupBy('all_work.aw_id')
-            ->findAll();
-        return $this->respond($data);
     }
 }
