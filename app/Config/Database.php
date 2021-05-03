@@ -32,10 +32,10 @@ class Database extends Config
 	 */
 	public $default = [
 		'DSN'      => '',
-		'hostname' => 'localhost',
-		'username' => 'root',
-		'password' => '',
-		'database' => 'flashwork',
+		'hostname' => 'us-cdbr-east-03.cleardb.com',
+		'username' => 'bd73615bdd11fb',
+		'password' => 'a3b52843',
+		'database' => 'heroku_07c0dcb74d7fa85',
 		'DBDriver' => 'MySQLi',
 		'DBPrefix' => '',
 		'pConnect' => false,
