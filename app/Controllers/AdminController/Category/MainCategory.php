@@ -14,21 +14,19 @@ class MainCategory extends ResourceController
     {
         $Main_Cate_model = new MaincategoryModel();
         $main_cate_name = $this->request->getVar('main_cate_name');
+        $main_cate_img = $this->request->getVar('main_cate_img');
         $status = $this->request->getVar('status');
         $dataCate = [
-            "main_cate_name" => $main_cate_name
+            "main_cate_name" => $main_cate_name,
+            "main_cate_img" => $main_cate_img
         ];
-        $data =  $Main_Cate_model->select('main_cate_name')->where($dataCate)->find();
+        $data =  $Main_Cate_model->where('main_cate_name', $main_cate_name)->find();
         if ($status === 'Admin') {
-            if ($data) {
+            if (count($data) > 0) {
                 $response = [
                     'status' => 201,
                     'error' => null,
-                    "message" => [
-                        'success' => 'ไม่สามารถเพิ่มประเภทงานหลักได้เนื่องข้อมูลซ้ำ',
-                        'ประเภทงานที่มีอยู่แล้ว' => $data,
-                        'ประเภทงานที่จะเพิ่ม' => $dataCate
-                    ]
+                    'message' => 'dupicate category'
                 ];
                 return $this->respond($response);
             } else {
@@ -36,9 +34,7 @@ class MainCategory extends ResourceController
                 $response = [
                     'status' => 201,
                     'error' => null,
-                    "message" => [
-                        'success' => 'เพิ่มประเภทงานหลักเรียบร้อย'
-                    ]
+                    'message' => 'success'
                 ];
                 return $this->respond($response);
             }
@@ -85,7 +81,7 @@ class MainCategory extends ResourceController
         ];
         return $this->respond($response);
     }
-    public function showWorkbyCate($id = null)
+    public function showWorkbyMaincate($id = null)
     {
         $model = new MaincategoryModel();
         $data = $model

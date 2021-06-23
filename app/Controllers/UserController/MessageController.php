@@ -29,7 +29,8 @@ class MessageController extends ResourceController
                     "Username" => $User_id,
                     "To_Username" => $toUser_id,
                     "m_message" => $message,
-                    "m_room" =>  $row['m_room']
+                    "m_room" =>  $row['m_room'],
+                    "status" => "unraed"
                 ];
                 $MessageModel->insert($data);
                 $response = [
@@ -42,7 +43,8 @@ class MessageController extends ResourceController
                 "Username" => $User_id,
                 "To_Username" => $toUser_id,
                 "m_message" => $message,
-                "m_room" => $room
+                "m_room" => $room,
+                "status" => "unraed"
             ];
             $MessageModel->insert($data);
             $response = [
@@ -57,15 +59,34 @@ class MessageController extends ResourceController
         $data = $MessageModel->select("m_message , m_time , Username , To_Username")->where('m_room', $id)->findAll();
         return $this->respond($data);
     }
-    public function showlistmessage($id = null)
+
+    public function readmessage($id = null)
     {
         $MessageModel = new MessageModel();
-        $data1 = $MessageModel->distinct()->select("To_Username,std_image,em_image,m_room")
-            ->join('student', 'student.std_id = message.To_Username', 'LEFT')
-            ->join('employer', 'employer.em_username = message.To_Username', 'LEFT')
-            ->where('Username', $id)
-            ->findAll();
-
-        return $this->respond($data1);
+        $m_room = $this->request->getVar('m_room');
+        $whereuser = "To_Username = '$id' AND m_room ='$m_room'";
+        $MessageModel->where($whereuser)->set(['status' => "read"])->update();
+    }
+    public function notificationsmessage($id = null)
+    {
+        $MessageModel = new MessageModel();
+        $whereuser = "To_Username = '$id'  AND status ='unread'";
+        $data =  $MessageModel->selectCount('To_Username')->where($whereuser)->findAll();
+        return $this->respond($data);
+    }
+    public function showallusermessage($id = null)
+    {
+        $MessageModel = new MessageModel;
+        $data = $MessageModel->select("m_id,Username,std_image,em_image,m_room")
+            ->join('student', 'student.std_id = message.Username', 'LEFT')
+            ->join('employer', 'employer.em_username = message.Username', 'LEFT')
+            ->where("To_Username", $id)->orderby('m_id', 'DESC')->groupby('Username')->findAll();
+        return $this->respond($data);
+    }
+    public function showalluserandstatusmessage($id = null)
+    {
+        $MessageModel = new MessageModel;
+        $data = $MessageModel->select("m_id,Username,m_message,message.status")->where("To_Username", $id)->findAll();
+        return $this->respond($data);
     }
 }

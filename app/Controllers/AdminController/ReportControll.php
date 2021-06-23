@@ -16,6 +16,14 @@ class ReportControll extends ResourceController
         $data = $repModel->where("rp_status",$Read)->orderBy('rp_importance', 'DESC')->findAll();
         return $this->respond($data);
     }
+
+    public function showreadReport(){
+        $repModel= new ReportModel();
+        $Read= 'Read';
+        $data = $repModel->where("rp_status",$Read)->orderBy('rp_importance', 'DESC')->findAll();
+        return $this->respond($data);
+    }
+    
     public function updateReport($reportId=null){
         $repModel= new ReportModel();
 

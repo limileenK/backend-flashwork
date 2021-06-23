@@ -16,7 +16,7 @@ class ManagePost extends ResourceController
     public function ShowPostNotpass()
     {
         $PostworkModel = new PostworkModel();
-        $res = $PostworkModel->select('aw_id,aw_name,aw_detail,sub_cate_name,std_id')
+        $res = $PostworkModel->select('aw_id,aw_name,aw_detail,sub_cate_name,std_id,Comment')
             ->join('package', 'package.pk_aw_id = all_work.aw_id')
             ->join('sub_cate', 'sub_cate.sub_cate_id = all_work.aw_sub_cate_id')
             ->join('student', 'student.std_id = all_work.aw_std_id')

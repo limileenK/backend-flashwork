@@ -106,4 +106,31 @@ class SubCategoryControl extends ResourceController
             return $this->failNotFound('No Product');
         }
     }
+
+    public function selectworkbySubcate($id = null)
+    {
+        $model = new MaincategoryModel();  //อิมพอท
+        $data = $model
+            ->select('*')
+            ->join('sub_cate', 'sub_cate.main_cate_id = main_cate.main_cate_id')
+            ->where('sub_cate.main_cate_id', $id)
+            ->findAll();
+        return $this->respond($data);
+    }
+
+    public function showWorkbySubcate($id = null)
+    {
+        $model = new Subcategory();
+        $data = $model
+            ->select('*')
+            
+            ->join('all_work', 'all_work.aw_sub_cate_id = sub_cate.sub_cate_id')
+            ->join('work_img', 'all_work.aw_id = work_img.w_aw_id')
+            ->join('package', ' all_work.aw_id = package.pk_aw_id')
+            ->where('sub_cate.sub_cate_id', $id)
+            ->where('all_work.aw_status',  'Approve')
+            ->groupBy('all_work.aw_id')
+            ->findAll();
+        return $this->respond($data);
+    }
 }

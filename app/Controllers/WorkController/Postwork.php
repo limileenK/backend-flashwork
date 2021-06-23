@@ -9,17 +9,14 @@ use App\Models\Work_model\PostworkModel;
 use App\Models\Work_model\PackageModel;
 use App\Models\Work_model\Work_img;
 
-
-
 class Postwork extends ResourceController
 {
-
     use ResponseTrait;
     public function Postwork()
     {
-        $StudentModel = new StudentModel();
+        $StudentModel  = new StudentModel();
         $PostworkModel = new PostworkModel();
-        $PackageModel = new PackageModel();
+        $PackageModel  = new PackageModel();
         $Work_imgModel = new Work_img();
 
         $uniqid = date('y') . date('d') . date('m') . microtime(true);
@@ -93,4 +90,84 @@ class Postwork extends ResourceController
             return $this->respond($response);
         }
     }
+    public function EditPost($id = null){
+        $PostworkModel = new PostworkModel();
+
+        $dataPost = [
+            "aw_name" => $this->request->getVar('aw_name'),
+            "aw_detail" => $this->request->getVar('aw_detail'),
+            "aw_status" => $this->request->getVar('aw_status')
+        ];
+        $PostworkModel->update($id, $dataPost);
+        $response = [
+            "message" => 'success'     
+        ];
+        return $this->respond($response);
+    }
+    public function insertPacks(){
+        $PackageModel  = new PackageModel();
+        $pk_name = $this->request->getVar('pk_name');
+        $pk_detail = $this->request->getVar('pk_detail');
+        $pk_price = $this->request->getVar('pk_price');
+        $pk_aw_id = $this->request->getVar('pk_aw_id');
+        $pk_time_period = $this->request->getVar('pk_time_period');
+
+        $dataPacks = [
+            'pk_name'=>$pk_name,
+            'pk_detail'=>$pk_detail,
+            'pk_price'=>$pk_price,
+            'pk_aw_id'=>$pk_aw_id,
+            'pk_time_period'=>$pk_time_period,
+        ];
+        $PackageModel->insert($dataPacks);
+        $response = [
+            "message" => 'success'     
+        ];
+        return $this->respond($response);
+
+    }
+    public function deletePhotos($id = null)
+    {    
+        $Work_imgModel = new Work_img();
+        $photo = $Work_imgModel->where('w_img_id', $id)->find();
+        if ($photo) {
+            $Work_imgModel->delete($id);
+            $response = [
+                "message" => 'Delete success'
+            ];
+            return $this->respond($response);
+     
+        }
+        else {
+            $response = [
+                "message" => 'Delete No success'
+            ];
+            return $this->respond($response);
+        }
+    }
+    public function addMorePhotos(){
+        $Work_imgModel = new Work_img();
+        $Work_img = $this->request->getVar('w_img_name');
+        $emp_id = $this->request->getVar('w_aw_id');
+        $result = array();
+        foreach ($Work_img as $key => $val) {
+            $result = [
+                'w_aw_id'  => $emp_id,
+                'w_img_name' => $val,
+            ];
+            $workimg = $Work_imgModel->insert($result);
+        }
+        if ($workimg) {
+            $response = [
+                'messages' => 'success'
+            ];
+            return $this->respond($response);
+        } else {
+            $response = [
+                'messages' => 'FailImg'
+            ];
+            return $this->respond($response);
+        }
+    }
+    
 }

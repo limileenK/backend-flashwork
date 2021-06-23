@@ -40,6 +40,26 @@ class Employercontroller extends ResourceController
         ];
         return $this->respond($response);
     }
+
+    public function addimgEmp($username = null)
+    {
+        $emp = new EmployerModel();
+
+        $em_image = $this->request->getVar('em_image');
+       
+
+        $data = [
+            "em_image" =>  $em_image,
+            
+        ];
+        $emp->update($username, $data);
+
+        $response = [
+            'messages' => 'success'
+        ];
+        return $this->respond($response);
+    }
+
     public function getHistoryEmp($id = null){
         $employ = new EmploymentModel();
 
@@ -49,5 +69,20 @@ class Employercontroller extends ResourceController
         ->where('emm_status','Success')->where("emm_user_id",$id)
         ->findAll();
         return $this->respond($data);
+    }
+
+    public function changePassEmp($id = null){
+        $EmployerModel = new EmployerModel();
+
+        $pass = $this->request->getVar('em_password');
+        $password = md5($pass);
+        $data = [
+            "em_password" => $password,
+        ];
+        $EmployerModel->update($id, $data);
+        $response = [
+            'messages' => 'success'
+        ];
+        return $this->respond($response);
     }
 }
